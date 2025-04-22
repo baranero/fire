@@ -1,19 +1,58 @@
+// EquipmentListScreen.tsx
 import React, { useState } from 'react';
-import { View, FlatList, TextInput, StyleSheet, Text } from 'react-native';
+import { View, FlatList, TextInput, StyleSheet, Text, Button, ScrollView, TouchableOpacity } from 'react-native';
 import RNPickerSelect from 'react-native-picker-select';
 import { EquipmentCard } from '../components/EquipmentCard';
+import { FilterGroup } from '../components/FilterGroup';
 import equipmentData from '../data/mock_equipment.json';
+
+const allCategories = [...new Set(equipmentData.map((item) => item.kategoria))];
+const allStatuses = [...new Set(equipmentData.map((item) => item.status))];
+const allProducers = [...new Set(equipmentData.map((item) => item.producent))];
+const allTypes = [...new Set(equipmentData.map((item) => item.typ))];
+const allOwners = [...new Set(equipmentData.map((item) => item.posiadacz))];
 
 export default function EquipmentListScreen() {
   const [search, setSearch] = useState('');
+  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+  const [selectedStatuses, setSelectedStatuses] = useState<string[]>([]);
+  const [selectedProducers, setSelectedProducers] = useState<string[]>([]);
+  const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
+  const [selectedOwners, setSelectedOwners] = useState<string[]>([]);
+  const [filtersVisible, setFiltersVisible] = useState(false);
   const [sortOption, setSortOption] = useState<string | null>(null);
 
+  const toggleSelection = (selected: string[], setSelected: (s: string[]) => void, value: string) => {
+    setSelected(
+      selected.includes(value) ? selected.filter((v) => v !== value) : [...selected, value]
+    );
+  };
+
+  const resetFilters = () => {
+    setSelectedCategories([]);
+    setSelectedStatuses([]);
+    setSelectedProducers([]);
+    setSelectedTypes([]);
+    setSelectedOwners([]);
+    setSearch('');
+    setSortOption(null);
+  };
+
   const filteredData = equipmentData
-    .filter((item) =>
-      Object.values(item).some((value) =>
+    .filter((item) => {
+      const matchSearch = Object.values(item).some((value) =>
         String(value).toLowerCase().includes(search.toLowerCase())
-      )
-    )
+      );
+      const matchCategory = selectedCategories.length ? selectedCategories.includes(item.kategoria) : true;
+      const matchStatus = selectedStatuses.length ? selectedStatuses.includes(item.status) : true;
+      const matchProducer = selectedProducers.length ? selectedProducers.includes(item.producent) : true;
+      const matchType = selectedTypes.length ? selectedTypes.includes(item.typ) : true;
+      const matchOwner = selectedOwners.length ? selectedOwners.includes(item.posiadacz) : true;
+
+      return (
+        matchSearch && matchCategory && matchStatus && matchProducer && matchType && matchOwner
+      );
+    })
     .sort((a, b) => {
       switch (sortOption) {
         case 'az':
@@ -29,8 +68,27 @@ export default function EquipmentListScreen() {
       }
     });
 
+  const renderActiveFilters = () => {
+    const filters = [
+      ...selectedCategories.map((v) => `Kategoria: ${v}`),
+      ...selectedStatuses.map((v) => `Status: ${v}`),
+      ...selectedProducers.map((v) => `Producent: ${v}`),
+      ...selectedTypes.map((v) => `Typ: ${v}`),
+      ...selectedOwners.map((v) => `Posiadacz: ${v}`)
+    ];
+    if (filters.length === 0) return null;
+    return (
+      <View style={styles.activeFilters}>
+        <Text style={styles.activeFiltersLabel}>Aktywne filtry:</Text>
+        {filters.map((f, index) => (
+          <Text key={index} style={styles.activeFilterItem}>• {f}</Text>
+        ))}
+      </View>
+    );
+  };
+
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
       <TextInput
         placeholder="Search equipment..."
         value={search}
@@ -38,31 +96,62 @@ export default function EquipmentListScreen() {
         style={styles.input}
       />
 
-      <RNPickerSelect
-        onValueChange={(value) => setSortOption(value)}
-        placeholder={{ label: "Sortuj według...", value: null }}
-        items={[
-          { label: "Model A → Z", value: "az" },
-          { label: "Model Z → A", value: "za" },
-          { label: "Data przeglądu (najnowsze)", value: "date_new" },
-          { label: "Data przeglądu (najstarsze)", value: "date_old" }
-        ]}
-        style={pickerSelectStyles}
-      />
+      <View style={styles.pickerContainerTop}>
+        <RNPickerSelect
+          onValueChange={(value) => setSortOption(value)}
+          placeholder={{ label: "Sortuj według...", value: null }}
+          items={[
+            { label: "Model A → Z", value: "az" },
+            { label: "Model Z → A", value: "za" },
+            { label: "Data przeglądu (najnowsze)", value: "date_new" },
+            { label: "Data przeglądu (najstarsze)", value: "date_old" }
+          ]}
+          style={pickerSelectStyles}
+        />
+      </View>
 
-      {sortOption && (
-        <View style={styles.sortInfo}>
-          <Text style={styles.sortText}>
-            Aktualne sortowanie: {(() => {
-              switch (sortOption) {
-                case 'az': return 'Model A → Z';
-                case 'za': return 'Model Z → A';
-                case 'date_new': return 'Data przeglądu (najnowsze)';
-                case 'date_old': return 'Data przeglądu (najstarsze)';
-                default: return '';
-              }
-            })()}
-          </Text>
+      {renderActiveFilters()}
+
+      <TouchableOpacity onPress={() => setFiltersVisible(!filtersVisible)} style={styles.toggleFilters}>
+        <Text style={styles.toggleFiltersText}>{filtersVisible ? 'Ukryj filtry ▲' : 'Pokaż filtry ▼'}</Text>
+      </TouchableOpacity>
+
+      {filtersVisible && (
+        <View>
+          <FilterGroup
+            label="Kategoria"
+            options={allCategories}
+            selected={selectedCategories}
+            onChange={(value) => toggleSelection(selectedCategories, setSelectedCategories, value)}
+          />
+          <FilterGroup
+            label="Status"
+            options={allStatuses}
+            selected={selectedStatuses}
+            onChange={(value) => toggleSelection(selectedStatuses, setSelectedStatuses, value)}
+          />
+          <FilterGroup
+            label="Producent"
+            options={allProducers}
+            selected={selectedProducers}
+            onChange={(value) => toggleSelection(selectedProducers, setSelectedProducers, value)}
+          />
+          <FilterGroup
+            label="Typ"
+            options={allTypes}
+            selected={selectedTypes}
+            onChange={(value) => toggleSelection(selectedTypes, setSelectedTypes, value)}
+          />
+          <FilterGroup
+            label="Posiadacz"
+            options={allOwners}
+            selected={selectedOwners}
+            onChange={(value) => toggleSelection(selectedOwners, setSelectedOwners, value)}
+          />
+
+          <View style={styles.resetButton}>
+            <Button title="Resetuj filtry" onPress={resetFilters} color="#cc0000" />
+          </View>
         </View>
       )}
 
@@ -70,14 +159,14 @@ export default function EquipmentListScreen() {
         data={filteredData}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => <EquipmentCard item={item} />}
+        scrollEnabled={false}
       />
-    </View>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     backgroundColor: '#fff',
     paddingTop: 10
   },
@@ -89,11 +178,33 @@ const styles = StyleSheet.create({
     padding: 10,
     fontSize: 16
   },
-  sortInfo: {
+  toggleFilters: {
     marginHorizontal: 12,
     marginBottom: 10
   },
-  sortText: {
+  toggleFiltersText: {
+    fontSize: 16,
+    color: '#007AFF',
+    fontWeight: 'bold'
+  },
+  pickerContainerTop: {
+    marginHorizontal: 12,
+    marginBottom: 10
+  },
+  resetButton: {
+    marginHorizontal: 12,
+    marginBottom: 20
+  },
+  activeFilters: {
+    marginHorizontal: 12,
+    marginBottom: 10
+  },
+  activeFiltersLabel: {
+    fontWeight: 'bold',
+    marginBottom: 4,
+    color: '#333'
+  },
+  activeFilterItem: {
     fontSize: 14,
     color: '#555'
   }
@@ -108,8 +219,6 @@ const pickerSelectStyles = StyleSheet.create({
     borderColor: 'gray',
     borderRadius: 10,
     color: 'black',
-    marginHorizontal: 12,
-    marginBottom: 10,
     backgroundColor: '#f0f0f0'
   },
   inputAndroid: {
@@ -120,8 +229,6 @@ const pickerSelectStyles = StyleSheet.create({
     borderColor: 'gray',
     borderRadius: 10,
     color: 'black',
-    marginHorizontal: 12,
-    marginBottom: 10,
     backgroundColor: '#f0f0f0'
   }
 });
