@@ -1,0 +1,33 @@
+[
+    {
+      "id": "LIN-001",
+      "producent": "Petzl",
+      "model": "Grillon",
+      "kategoria": "Lina",
+      "typ": "Statyczna",
+      "posiadacz": "Magazyn",
+      "status": "W magazynie",
+      "data_przegladu": "2024-10-10"
+    },
+    {
+      "id": "UPR-002",
+      "producent": "Singing Rock",
+      "model": "Expert III",
+      "kategoria": "Uprząż",
+      "typ": "PPE",
+      "posiadacz": "301[W]21",
+      "status": "Przypisany",
+      "data_przegladu": "2024-09-15"
+    },
+    {
+        "id": "UPR-003",
+        "producent": "Petzl",
+        "model": "Expert III",
+        "kategoria": "Karabinek",
+        "typ": "P",
+        "posiadacz": "Jakub Baran",
+        "status": "Przypisany",
+        "data_przegladu": "2024-09-15"
+      }
+  ]
+  
