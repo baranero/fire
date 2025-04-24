@@ -90,7 +90,7 @@ export default function EquipmentListScreen() {
   return (
     <ScrollView style={styles.container}>
       <TextInput
-        placeholder="Search equipment..."
+        placeholder="Wyszukaj sprzęt..."
         value={search}
         onChangeText={setSearch}
         style={styles.input}

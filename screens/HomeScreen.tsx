@@ -1,37 +1,70 @@
 import React from "react";
-import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity, Image, ScrollView } from "react-native";
 import { NavigationProp, useNavigation } from "@react-navigation/native";
-
+import Icon from "react-native-vector-icons/FontAwesome"; // Ikony FontAwesome
+import { RootStackParamList } from "../types";
 
 export default function HomeScreen() {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
   return (
-    <View style={styles.container}>
-      <Image
-        source={require('../assets/logo-psp.png')}
-        style={styles.logo}
-      />
-      <TouchableOpacity style={styles.card} onPress={() => navigation.navigate("Sprzęt")}>
-        <Text style={styles.cardText}>Sprzęt wysokościowy</Text>
-      </TouchableOpacity>
-    </View>
+    <ScrollView contentContainerStyle={styles.container}>
+      {/* Logo PSP */}
+      <Image source={require("../assets/logo-psp.png")} style={styles.logo} />
+
+      {/* Przyciski w dwóch kolumnach */}
+      <View style={styles.cardsContainer}>
+        {/* Sprzęt */}
+        <TouchableOpacity
+          style={styles.card}
+          onPress={() => navigation.navigate("Sprzęt")}
+        >
+          <Icon name="gear" size={50} color="#fff" style={styles.icon} />
+          <Text style={styles.cardText}>Sprzęt</Text>
+        </TouchableOpacity>
+
+        {/* Baza wiedzy */}
+        <TouchableOpacity style={styles.card} onPress={() => navigation.navigate("BazaWiedzy")}>
+          <Icon name="book" size={50} color="#fff" style={styles.icon} />
+          <Text style={styles.cardText}>Baza wiedzy</Text>
+        </TouchableOpacity>
+
+        {/* Sprawy zmianowe */}
+        <TouchableOpacity style={styles.card} onPress={() => navigation.navigate("Zmiany")}>
+          <Icon name="calendar" size={50} color="#fff" style={styles.icon} />
+          <Text style={styles.cardText}>Sprawy zmianowe</Text>
+        </TouchableOpacity>
+
+        {/* Asystent AI */}
+        <TouchableOpacity style={styles.card} onPress={() => navigation.navigate("AsystentAI")}>
+          <Icon name="robot" size={50} color="#fff" style={styles.icon} />
+          <Text style={styles.cardText}>Asystent AI</Text>
+        </TouchableOpacity>
+      </View>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flexGrow: 1,
     backgroundColor: "#fff",
     alignItems: "center",
     paddingHorizontal: 20,
     paddingVertical: 40,
   },
-  title: {
-    fontSize: 22,
-    fontWeight: "bold",
+  logo: {
+    width: 120,
+    height: 160,
     marginBottom: 40,
-    textAlign: "center",
+    resizeMode: "contain",
+  },
+  cardsContainer: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "space-between", // Sprawia, że kolumny są równomiernie rozłożone
+    width: "100%", // Pełna szerokość kontenera
+    paddingHorizontal: 5,
   },
   card: {
     backgroundColor: "#007AFF",
@@ -42,16 +75,18 @@ const styles = StyleSheet.create({
     shadowRadius: 8,
     shadowOffset: { width: 0, height: 2 },
     elevation: 5,
+    width: "45%", // Każda karta ma szerokość 45% w przypadku dwóch kolumn
+    marginBottom: 20,
+    alignItems: "center",
   },
   cardText: {
     color: "#fff",
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: "600",
+    marginTop: 10,
+    textAlign: "center",
   },
-  logo: {
-    width: 120,
-    height: 160,
-    marginBottom: 40,
-    resizeMode: 'contain' // Utrzymanie proporcji
-  }
+  icon: {
+    marginBottom: 10,
+  },
 });
