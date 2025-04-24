@@ -12,11 +12,11 @@ export default function App() {
     <NavigationContainer>
       <Stack.Navigator>
         <Stack.Screen name="Start" component={HomeScreen} />
-<Stack.Screen name="Sprzęt" component={EquipmentTypeScreen} />
-<Stack.Screen name="Szczegóły" component={EquipmentDetailScreen} />
-{/* <Stack.Screen name="SprzętWysokościowy" component={SprzetWysokosciowyScreen} />
+        <Stack.Screen name="Sprzęt" component={EquipmentTypeScreen} />
+        <Stack.Screen name="SprzętWysokościowy" component={EquipmentListScreen} options={{ title: "Sprzęt wysokościowy" }}/>
+        <Stack.Screen name="Szczegóły" component={EquipmentDetailScreen} />
+        {/* <Stack.Screen name="SprzętWysokościowy" component={SprzetWysokosciowyScreen} />
 <Stack.Screen name="SprzętGaśniczy" component={SprzetGasniczyScreen} /> */}
-
       </Stack.Navigator>
     </NavigationContainer>
   );
