@@ -25,6 +25,13 @@ export default function EquipmentDetailScreen() {
   const route = useRoute<DetailScreenRouteProp>();
   const { item } = route.params;
 
+  const formatDate = (dateStr: string) => {
+    if (!dateStr) return "";
+    const dateOnly = dateStr.slice(0, 10); // np. 2024-05-01
+    const [year, month, day] = dateOnly.split("-");
+    return `${day}.${month}.${year}`;
+  };
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>{item.model} ({item.category})</Text>
@@ -34,8 +41,8 @@ export default function EquipmentDetailScreen() {
       <Text style={styles.field}><Text style={styles.label}>Typ:</Text> {item.type}</Text>
       <Text style={styles.field}><Text style={styles.label}>Kategoria:</Text> {item.category}</Text>
       <Text style={styles.field}><Text style={styles.label}>Status:</Text> {item.status}</Text>
-      <Text style={styles.field}><Text style={styles.label}>Data przeglądu:</Text> {item.inspectionDate}</Text>
-      <Text style={styles.field}><Text style={styles.label}>Kolejny przegląd:</Text> {item.nextInspectionDate}</Text>
+      <Text style={styles.field}><Text style={styles.label}>Data przeglądu:</Text> {formatDate(item.inspectionDate)}</Text>
+      <Text style={styles.field}><Text style={styles.label}>Kolejny przegląd:</Text> {formatDate(item.nextInspectionDate)}</Text>
       <Text style={styles.field}><Text style={styles.label}>Posiadacz:</Text> {item.owner}</Text>
     </View>
   );
