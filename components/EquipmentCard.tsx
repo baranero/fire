@@ -2,16 +2,18 @@ import React from 'react';
 import { View, Text, StyleSheet, Pressable } from 'react-native';
 import { useNavigation, NavigationProp } from '@react-navigation/native';
 
-// Typ jednego sprzętu
+// Typ jednego sprzętu (angielskie klucze zgodne z API)
 type EquipmentItem = {
   id: string;
-  producent: string;
+  manufacturer: string;
   model: string;
-  kategoria: string;
-  typ: string;
-  posiadacz: string;
+  category: string;
+  type: string;
+  owner: string;
   status: string;
-  data_przegladu: string;
+  inspectionDate: string;
+  nextInspectionDate: string;
+  serialNumber: string;
 };
 
 // Typ całego stosu ekranów
@@ -26,10 +28,11 @@ export const EquipmentCard = ({ item }: { item: EquipmentItem }) => {
   return (
     <Pressable onPress={() => navigation.navigate('Szczegóły', { item })}>
       <View style={styles.card}>
-        <Text style={styles.title}>{item.model} ({item.kategoria})</Text>
-        <Text>Producent: {item.producent}</Text>
+        <Text style={styles.title}>{item.model} ({item.category})</Text>
+        <Text>Producent: {item.manufacturer}</Text>
         <Text>Status: {item.status}</Text>
-        <Text>Przegląd: {item.data_przegladu}</Text>
+        <Text>Przegląd: {item.inspectionDate}</Text>
+        <Text>Numer seryjny: {item.serialNumber}</Text>
       </View>
     </Pressable>
   );

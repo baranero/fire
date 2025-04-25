@@ -4,13 +4,15 @@ import { RouteProp, useRoute } from '@react-navigation/native';
 
 type EquipmentItem = {
   id: string;
-  producent: string;
+  manufacturer: string;
   model: string;
-  kategoria: string;
-  typ: string;
-  posiadacz: string;
+  category: string;
+  type: string;
   status: string;
-  data_przegladu: string;
+  inspectionDate: string;
+  nextInspectionDate: string;
+  owner: string;
+  serialNumber: string;
 };
 
 type RootStackParamList = {
@@ -25,12 +27,16 @@ export default function EquipmentDetailScreen() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>{item.model} ({item.kategoria})</Text>
-      <Text>Producent: {item.producent}</Text>
-      <Text>Typ: {item.typ}</Text>
-      <Text>Posiadacz: {item.posiadacz}</Text>
-      <Text>Status: {item.status}</Text>
-      <Text>Data przeglądu: {item.data_przegladu}</Text>
+      <Text style={styles.title}>{item.model} ({item.category})</Text>
+      <Text style={styles.field}><Text style={styles.label}>ID:</Text> {item.id}</Text>
+      <Text style={styles.field}><Text style={styles.label}>Numer seryjny:</Text> {item.serialNumber}</Text>
+      <Text style={styles.field}><Text style={styles.label}>Producent:</Text> {item.manufacturer}</Text>
+      <Text style={styles.field}><Text style={styles.label}>Typ:</Text> {item.type}</Text>
+      <Text style={styles.field}><Text style={styles.label}>Kategoria:</Text> {item.category}</Text>
+      <Text style={styles.field}><Text style={styles.label}>Status:</Text> {item.status}</Text>
+      <Text style={styles.field}><Text style={styles.label}>Data przeglądu:</Text> {item.inspectionDate}</Text>
+      <Text style={styles.field}><Text style={styles.label}>Kolejny przegląd:</Text> {item.nextInspectionDate}</Text>
+      <Text style={styles.field}><Text style={styles.label}>Posiadacz:</Text> {item.owner}</Text>
     </View>
   );
 }
@@ -40,8 +46,15 @@ const styles = StyleSheet.create({
     padding: 20
   },
   title: {
-    fontSize: 20,
+    fontSize: 22,
     fontWeight: 'bold',
-    marginBottom: 10
+    marginBottom: 15
+  },
+  field: {
+    fontSize: 16,
+    marginBottom: 8
+  },
+  label: {
+    fontWeight: 'bold'
   }
 });
