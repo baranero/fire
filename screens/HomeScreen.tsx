@@ -34,12 +34,6 @@ export default function HomeScreen() {
           <Icon name="calendar" size={50} color="#fff" style={styles.icon} />
           <Text style={styles.cardText}>Sprawy zmianowe</Text>
         </TouchableOpacity>
-
-        {/* Asystent AI */}
-        <TouchableOpacity style={styles.card} onPress={() => navigation.navigate("AsystentAI")}>
-          <Icon name="robot" size={50} color="#fff" style={styles.icon} />
-          <Text style={styles.cardText}>Asystent AI</Text>
-        </TouchableOpacity>
       </View>
     </ScrollView>
   );

@@ -4,8 +4,17 @@ export type RootStackParamList = {
   SprzętWysokościowy: undefined;
   SprzętGaśniczy: undefined;
   BazaWiedzy: undefined;
+
+  RatownictwoChemiczne: undefined;
+  RatownictwoTechniczne: undefined;
+  RatownictwoWodne: undefined;
+  RatownictwoWysokosciowe: undefined;
+  RatownictwoMedyczne: undefined;
+  PoszukiwawczoRatownicze: undefined;
+  GaszeniePozarow: undefined;
+  PDFViewer: { file: any };
+
   Zmiany: undefined;
-  AsystentAI: undefined;
   Szczegóły: { item: any };
 
   // Pojazdy ratownicze
